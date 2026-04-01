@@ -57,12 +57,19 @@ The server will be running at `http://localhost:5000`
 
 ## Project Structure
 src/
+
 ├── config/ # Database connection and configuration
+
 ├── controllers/ # Request handlers
+
 ├── middleware/ # Validation, error handling
+
 ├── models/ # Database queries
+
 ├── routes/ # API route definitions
+
 ├── utils/ # Utility functions and custom errors
+
 └── index.js # Application entry point
 
 ## API Reference

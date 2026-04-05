@@ -1,5 +1,7 @@
 # pahin-backend
 
+![CI](https://github.com/olchika2006/pahin-backend/actions/workflows/ci.yml/badge.svg)
+
 REST API for the Pahin platform — a volunteer tree-planting initiative that allows users to register trees, track their location on an interactive map, and receive digital certificates for their contribution.
 
 ## Tech Stack
@@ -48,14 +50,15 @@ The server will be running at `http://localhost:5000`
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `PORT` | Port the server runs on (default: 5000) |
-| `NODE_ENV` | Environment (`development` / `production`) |
-| `DATABASE_URL` | PostgreSQL connection string |
-| `JWT_SECRET` | Secret key for signing JWT tokens |
+| Variable       | Description                                |
+| -------------- | ------------------------------------------ |
+| `PORT`         | Port the server runs on (default: 5000)    |
+| `NODE_ENV`     | Environment (`development` / `production`) |
+| `DATABASE_URL` | PostgreSQL connection string               |
+| `JWT_SECRET`   | Secret key for signing JWT tokens          |
 
 ## Project Structure
+
 src/
 
 ├── config/ # Database connection and configuration
@@ -76,30 +79,30 @@ src/
 
 ### Auth
 
-| Method | Endpoint | Description | Auth required |
-|--------|----------|-------------|---------------|
-| POST | `/api/auth/register` | Register a new user | No |
-| POST | `/api/auth/login` | Log in | No |
-| POST | `/api/auth/logout` | Log out | Yes |
+| Method | Endpoint             | Description         | Auth required |
+| ------ | -------------------- | ------------------- | ------------- |
+| POST   | `/api/auth/register` | Register a new user | No            |
+| POST   | `/api/auth/login`    | Log in              | No            |
+| POST   | `/api/auth/logout`   | Log out             | Yes           |
 
 ### Users
 
-| Method | Endpoint | Description | Auth required |
-|--------|----------|-------------|---------------|
-| GET | `/api/users/me` | Get current user profile | Yes |
-| PUT | `/api/users/me` | Update profile | Yes |
-| GET | `/api/users/me/trees` | Get user's planted trees | Yes |
-| GET | `/api/users/me/certificates` | Get user's certificates | Yes |
+| Method | Endpoint                     | Description              | Auth required |
+| ------ | ---------------------------- | ------------------------ | ------------- |
+| GET    | `/api/users/me`              | Get current user profile | Yes           |
+| PUT    | `/api/users/me`              | Update profile           | Yes           |
+| GET    | `/api/users/me/trees`        | Get user's planted trees | Yes           |
+| GET    | `/api/users/me/certificates` | Get user's certificates  | Yes           |
 
 ### Trees
 
-| Method | Endpoint | Description | Auth required |
-|--------|----------|-------------|---------------|
-| GET | `/api/trees` | Get all trees (map data) | No |
-| GET | `/api/trees/species` | Get available tree species | No |
-| GET | `/api/trees/:id` | Get tree by ID | No |
-| POST | `/api/trees` | Plant a tree | Yes |
-| DELETE | `/api/trees/:id` | Delete a tree | Yes |
+| Method | Endpoint             | Description                | Auth required |
+| ------ | -------------------- | -------------------------- | ------------- |
+| GET    | `/api/trees`         | Get all trees (map data)   | No            |
+| GET    | `/api/trees/species` | Get available tree species | No            |
+| GET    | `/api/trees/:id`     | Get tree by ID             | No            |
+| POST   | `/api/trees`         | Plant a tree               | Yes           |
+| DELETE | `/api/trees/:id`     | Delete a tree              | Yes           |
 
 ## Scripts
 

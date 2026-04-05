@@ -1,31 +1,51 @@
+const AppError = require('../utils/AppError');
+
+const handleDBDuplicateError = (err) => {
+  const match = err.detail?.match(/\((.+?)\)=\((.+?)\)/);
+  const value = match ? match[2] : 'value';
+  return new AppError(`Значення "${value}" вже існує`, 409);
+};
+
+const handleDBForeignKeyError = () => new AppError("Пов'язаний запис не знайдено", 400);
+
+const handleDBNotNullError = (err) =>
+  new AppError(`Поле "${err.column || 'field'}" є обов\'язковим`, 400);
+
+const handleJWTError = () => new AppError('Невалідний токен. Будь ласка, увійдіть знову.', 401);
+
+const handleJWTExpiredError = () =>
+  new AppError('Токен прострочений. Будь ласка, увійдіть знову.', 401);
+
 const errorHandler = (err, req, res, next) => {
-  let statusCode = err.statusCode || 500;
-  let message = err.message || 'Internal Server Error';
+  err.statusCode = err.statusCode || 500;
 
-  if (err.code === '23505') {
-    statusCode = 409;
-    message = 'Такий запис вже існує';
+  if (process.env.NODE_ENV === 'development') {
+    return res.status(err.statusCode).json({
+      message: err.message,
+      status: err.statusCode,
+      stack: err.stack,
+    });
   }
 
-  if (err.code === '23503') {
-    statusCode = 400;
-    message = "Пов'язаний запис не знайдено";
+  let error = { ...err, message: err.message };
+
+  if (error.code === '23505') error = handleDBDuplicateError(error);
+  if (error.code === '23503') error = handleDBForeignKeyError();
+  if (error.code === '23502') error = handleDBNotNullError(error);
+  if (error.name === 'JsonWebTokenError') error = handleJWTError();
+  if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
+
+  if (err.isOperational) {
+    return res.status(err.statusCode).json({
+      message: err.message,
+      status: err.statusCode,
+    });
   }
 
-  if (err.name === 'JsonWebTokenError') {
-    statusCode = 401;
-    message = 'Невалідний токен авторизації';
-  }
-
-  if (err.name === 'TokenExpiredError') {
-    statusCode = 401;
-    message = 'Токен авторизації прострочений';
-  }
-
-  res.status(statusCode).json({
-    status: statusCode >= 500 ? 'error' : 'fail',
-    message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+  console.error('UNEXPECTED ERROR 💥', err);
+  return res.status(500).json({
+    message: 'Щось пішло не так. Спробуйте пізніше.',
+    status: 500,
   });
 };
 

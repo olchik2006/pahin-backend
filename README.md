@@ -1,6 +1,6 @@
 # pahin-backend
 
-![CI](https://github.com/olchika2006/pahin-backend/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/olchik2006/pahin-backend/actions/workflows/ci.yml/badge.svg)
 
 REST API for the Pahin platform — a volunteer tree-planting initiative that allows users to register trees, track their location on an interactive map, and receive digital certificates for their contribution.
 

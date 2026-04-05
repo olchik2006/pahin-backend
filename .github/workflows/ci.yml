@@ -2,9 +2,18 @@ name: Backend CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 'feature/**'
+      - 'chore/**'
+      - 'fix/**'
+      - 'hotfix/**'
+      - 'refactor/**'
+      - 'docs/**'
+      - 'test/**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   ci:

@@ -9,7 +9,7 @@ const handleDBDuplicateError = (err) => {
 const handleDBForeignKeyError = () => new AppError("Пов'язаний запис не знайдено", 400);
 
 const handleDBNotNullError = (err) =>
-  new AppError(`Поле "${err.column || 'field'}" є обов\'язковим`, 400);
+  new AppError(`Поле "${err.column || 'field'}" є обов'язковим`, 400);
 
 const handleJWTError = () => new AppError('Невалідний токен. Будь ласка, увійдіть знову.', 401);
 
@@ -27,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  let error = { ...err, message: err.message };
+  let error = { ...err, message: err.message, isOperational: err.isOperational };
 
   if (error.code === '23505') error = handleDBDuplicateError(error);
   if (error.code === '23503') error = handleDBForeignKeyError();
@@ -35,10 +35,10 @@ const errorHandler = (err, req, res, next) => {
   if (error.name === 'JsonWebTokenError') error = handleJWTError();
   if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
-  if (err.isOperational) {
-    return res.status(err.statusCode).json({
-      message: err.message,
-      status: err.statusCode,
+  if (error.isOperational) {
+    return res.status(error.statusCode).json({
+      message: error.message,
+      status: error.statusCode,
     });
   }
 

@@ -1,44 +1,34 @@
-const { pool } = require('../config/database');
+const userModel = require('../models/user.model');
 
-const findByEmail = async (email) => {
-  const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-  return result.rows[0] || null;
+const createUser = async (data) => {
+  return await userModel.createUser(data);
 };
 
-const findById = async (id) => {
-  const result = await pool.query(
-    'SELECT id, full_name, email, avatar_url, created_at FROM users WHERE id = $1',
-    [id]
-  );
-  return result.rows[0] || null;
+const getAllUsers = async () => {
+  return await userModel.getAllUsers();
 };
 
-const create = async ({ full_name, email, password_hash }) => {
-  const result = await pool.query(
-    `INSERT INTO users (full_name, email, password_hash)
-     VALUES ($1, $2, $3)
-     RETURNING id, full_name, email, created_at`,
-    [full_name, email, password_hash]
-  );
-  return result.rows[0];
+const getUserById = async (id) => {
+  return await userModel.findUserById(id);
 };
 
-const update = async (id, { full_name, avatar_url }) => {
-  const result = await pool.query(
-    `UPDATE users
-     SET full_name = COALESCE($1, full_name),
-         avatar_url = COALESCE($2, avatar_url),
-         updated_at = NOW()
-     WHERE id = $3
-     RETURNING id, full_name, email, avatar_url`,
-    [full_name, avatar_url, id]
-  );
-  return result.rows[0];
+const getUserByEmail = async (email) => {
+  return await userModel.findUserByEmail(email);
 };
 
-const remove = async (id) => {
-  const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING id', [id]);
-  return result.rows[0] || null;
+const deleteUser = async (id) => {
+  return await userModel.deleteUser(id);
 };
 
-module.exports = { findByEmail, findById, create, update, remove };
+const updateUser = async (id, data) => {
+  return await userModel.updateUser(id, data);
+};
+
+module.exports = {
+  createUser,
+  getAllUsers,
+  getUserById,
+  getUserByEmail,
+  deleteUser,
+  updateUser,
+};

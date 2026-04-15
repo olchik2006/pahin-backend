@@ -1,4 +1,5 @@
 const treeModel = require('../models/tree.model');
+const speciesModel = require('../models/species.model');
 
 const getAllTrees = async (filters) => {
   return await treeModel.getAllTrees(filters);
@@ -16,4 +17,8 @@ const getTreesByUserId = async (userId) => {
   return await treeModel.getTreesByUserId(userId);
 };
 
-module.exports = { getAllTrees, getTreeById, createTree, getTreesByUserId };
+const getAllSpecies = async () => {
+  return await speciesModel.getAllSpecies();
+};
+
+module.exports = { getAllTrees, getTreeById, createTree, getTreesByUserId, getAllSpecies };

@@ -33,12 +33,11 @@ const loginSchema = Joi.object({
 });
 
 const plantTreeSchema = Joi.object({
-  species_id: Joi.number().integer().positive().required(),
+  speciesId: Joi.string().uuid().required(),
   latitude: Joi.number().min(-90).max(90).required(),
   longitude: Joi.number().min(-180).max(180).required(),
-  location_name: Joi.string().max(255).optional(),
-  region: Joi.string().max(100).optional(),
-  personal_message: Joi.string().max(500).optional(),
+  locationName: Joi.string().max(255).optional(),
+  message: Joi.string().max(500).optional(),
 });
 
 module.exports = { validate, registerSchema, loginSchema, plantTreeSchema };

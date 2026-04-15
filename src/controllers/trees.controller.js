@@ -3,10 +3,9 @@ const AppError = require('../utils/AppError');
 const treeService = require('../services/tree.service');
 
 const getAllTrees = catchAsync(async (req, res) => {
-  const { region, species_id, limit, offset } = req.query;
-  const trees = await treeService.getAll({ region, species_id, limit, offset });
-  const total = await treeService.getTotalCount();
-  res.json({ message: 'success', status: 200, total, data: { trees } });
+  const { category, region } = req.query;
+  const trees = await treeService.getAllTrees({ category, region });
+  res.json({ message: 'success', status: 200, data: { trees } });
 });
 
 const getSpecies = catchAsync(async (req, res) => {
@@ -15,20 +14,28 @@ const getSpecies = catchAsync(async (req, res) => {
 });
 
 const getTreeById = catchAsync(async (req, res) => {
-  const tree = await treeService.findById(req.params.id);
+  const tree = await treeService.getTreeById(req.params.id);
   if (!tree) throw new AppError('Tree not found', 404);
   res.json({ message: 'success', status: 200, data: { tree } });
 });
 
 const plantTree = catchAsync(async (req, res) => {
-  const tree = await treeService.create({ ...req.body, user_id: req.user.id });
+  const { speciesId, latitude, longitude, locationName, message } = req.body;
+  const tree = await treeService.createTree({
+    userId: req.user.id,
+    speciesId,
+    latitude,
+    longitude,
+    locationName,
+    message,
+  });
   res.status(201).json({ message: 'Tree planted successfully', status: 201, data: { tree } });
 });
 
 const deleteTree = catchAsync(async (req, res) => {
-  const deleted = await treeService.remove(req.params.id, req.user.id);
+  const deleted = await treeService.deleteTree(req.params.id, req.user.id);
   if (!deleted) throw new AppError('Tree not found or you are not the owner', 404);
-  res.status(204).json({ message: 'Tree deleted', status: 204 });
+  res.status(204).send();
 });
 
 module.exports = { getAllTrees, getSpecies, getTreeById, plantTree, deleteTree };

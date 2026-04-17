@@ -2,6 +2,8 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const treeService = require('../services/tree.service');
 
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 const getAllTrees = catchAsync(async (req, res) => {
   const { category, region } = req.query;
   const trees = await treeService.getAllTrees({ category, region });
@@ -14,7 +16,9 @@ const getSpecies = catchAsync(async (req, res) => {
 });
 
 const getTreeById = catchAsync(async (req, res) => {
-  const tree = await treeService.getTreeById(req.params.id);
+  const { id } = req.params;
+  if (!uuidRegex.test(id)) throw new AppError('Invalid tree ID format', 400);
+  const tree = await treeService.getTreeById(id);
   if (!tree) throw new AppError('Tree not found', 404);
   res.json({ message: 'success', status: 200, data: { tree } });
 });
@@ -33,7 +37,9 @@ const plantTree = catchAsync(async (req, res) => {
 });
 
 const deleteTree = catchAsync(async (req, res) => {
-  const deleted = await treeService.deleteTree(req.params.id, req.user.id);
+  const { id } = req.params;
+  if (!uuidRegex.test(id)) throw new AppError('Invalid tree ID format', 400);
+  const deleted = await treeService.deleteTree(id, req.user.id);
   if (!deleted) throw new AppError('Tree not found or you are not the owner', 404);
   res.status(204).send();
 });

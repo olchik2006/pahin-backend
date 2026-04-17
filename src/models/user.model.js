@@ -17,7 +17,11 @@ const findUserByEmail = async (email) => {
 
 const findUserById = async (id) => {
   const { rows } = await pool.query(
+<<<<<<< feature/SCRUM-56-users-me
     'SELECT id, name, email, avatar_url, created_at, password FROM users WHERE id = $1',
+=======
+    'SELECT id, name, email, avatar_url, created_at FROM users WHERE id = $1',
+>>>>>>> main
     [id]
   );
   return rows[0];

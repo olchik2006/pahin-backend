@@ -4,15 +4,12 @@ const getAllSpecies = async () => {
   const { rows } = await pool.query(
     `SELECT
        id,
-       name_ukr AS name,
+       name_ukr   AS name,
        latin_name AS "latinName",
        category,
        description,
-       soil,
-       weather,
-       region,
-       distance,
-       image_url AS "imageUrl"
+       CONCAT_WS(', ', soil, weather, region) AS "suitableFor",
+       image_url  AS "imageUrl"
      FROM tree_species
      ORDER BY category, name_ukr`
   );
@@ -20,7 +17,19 @@ const getAllSpecies = async () => {
 };
 
 const findSpeciesById = async (id) => {
-  const { rows } = await pool.query('SELECT * FROM tree_species WHERE id = $1', [id]);
+  const { rows } = await pool.query(
+    `SELECT
+       id,
+       name_ukr   AS name,
+       latin_name AS "latinName",
+       category,
+       description,
+       CONCAT_WS(', ', soil, weather, region) AS "suitableFor",
+       image_url  AS "imageUrl"
+     FROM tree_species
+     WHERE id = $1`,
+    [id]
+  );
   return rows[0];
 };
 

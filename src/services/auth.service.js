@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken');
 const { pool } = require('../config/database');
 
 const register = async ({ full_name, email, password }) => {
+  if (!full_name || !email || !password) {
+    throw new Error('Name, email and password are required');
+  }
   const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
   if (existing.rows.length > 0) throw new Error('User already exists');
   const hashed = await bcrypt.hash(password, 10);
@@ -12,7 +15,11 @@ const register = async ({ full_name, email, password }) => {
      RETURNING id, name, email, created_at`,
     [full_name, email, hashed]
   );
-  return rows[0];
+  const user = rows[0];
+  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+  return { token, user: { id: user.id, name: user.name, email: user.email } };
 };
 
 const login = async ({ email, password }) => {

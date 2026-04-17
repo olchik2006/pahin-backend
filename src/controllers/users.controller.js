@@ -2,6 +2,8 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const userService = require('../services/user.service');
 
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 // SCRUM-14: POST /users
 const createUser = catchAsync(async (req, res) => {
   const { name, email, password } = req.body;
@@ -17,14 +19,22 @@ const getAllUsers = catchAsync(async (req, res) => {
 
 // SCRUM-14: GET /users/:id
 const getUserById = catchAsync(async (req, res) => {
-  const user = await userService.getUserById(req.params.id);
+  const { id } = req.params;
+  if (!uuidRegex.test(id)) {
+    throw new AppError('Invalid user ID format', 400);
+  }
+  const user = await userService.getUserById(id);
   if (!user) throw new AppError('User not found', 404);
   res.json({ status: 'success', data: { user } });
 });
 
 // SCRUM-14: DELETE /users/:id
 const deleteUser = catchAsync(async (req, res) => {
-  const deleted = await userService.deleteUser(req.params.id);
+  const { id } = req.params;
+  if (!uuidRegex.test(id)) {
+    throw new AppError('Invalid user ID format', 400);
+  }
+  const deleted = await userService.deleteUser(id);
   if (!deleted) throw new AppError('User not found', 404);
   res.status(204).send();
 });

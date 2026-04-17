@@ -2,9 +2,12 @@ const authService = require('../services/auth.service');
 
 const register = async (req, res) => {
   try {
-    const user = await authService.register(req.body);
-    res.status(201).json(user);
+    const data = await authService.register(req.body);
+    res.status(201).json(data);
   } catch (e) {
+    if (e.message === 'User already exists') {
+      return res.status(409).json({ message: e.message });
+    }
     res.status(400).json({ message: e.message });
   }
 };

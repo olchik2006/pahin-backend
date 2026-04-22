@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const usersController = require('../controllers/users.controller');
+const authMiddleware = require('../middleware/auth.middleware');
 
-router.get('/me', usersController.getMe);
-router.put('/me', usersController.updateMe);
-router.get('/me/trees', usersController.getMyTrees);
-router.get('/me/certificates', usersController.getMyCertificates);
+// SCRUM-56: /me endpoints (protected)
+router.get('/me', authMiddleware, usersController.getMe);
+router.put('/me', authMiddleware, usersController.updateMe);
+router.get('/me/trees', authMiddleware, usersController.getMyTrees);
+router.get('/me/certificates', authMiddleware, usersController.getMyCertificates);
 
 // SCRUM-14: CRUD /users
 router.post('/', usersController.createUser);

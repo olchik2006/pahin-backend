@@ -45,10 +45,10 @@ const getMe = catchAsync(async (req, res) => {
   res.json({ status: 'success', data: { user } });
 });
 
-// SCRUM-56: PUT /users/me
+// SCRUM-56: PUT /users/me  ← додано email
 const updateMe = catchAsync(async (req, res) => {
-  const { name, password, currentPassword } = req.body;
-  const user = await userService.updateMe(req.user.id, { name, password, currentPassword });
+  const { name, email, password, currentPassword } = req.body; // ← додано email
+  const user = await userService.updateMe(req.user.id, { name, email, password, currentPassword });
   res.json({ status: 'success', data: { user } });
 });
 

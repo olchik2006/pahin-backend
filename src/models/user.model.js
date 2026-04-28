@@ -65,11 +65,47 @@ const updateUser = async (id, { name, password, avatarUrl }) => {
   return rows[0];
 };
 
+const findUserByIdSafe = async (id) => {
+  const { rows } = await pool.query(
+    'SELECT id, name, email, avatar_url, created_at FROM users WHERE id = $1',
+    [id]
+  );
+  return rows[0] || null;
+};
+
+const updateUserById = async (id, data) => {
+  const fields = [];
+  const values = [];
+  let index = 1;
+
+  if (data.name !== undefined) {
+    fields.push(`name = $${index++}`);
+    values.push(data.name);
+  }
+  if (data.email !== undefined) {
+    fields.push(`email = $${index++}`);
+    values.push(data.email);
+  }
+
+  if (fields.length === 0) return null;
+
+  values.push(id);
+
+  const { rows } = await pool.query(
+    `UPDATE users SET ${fields.join(', ')} WHERE id = $${index}
+     RETURNING id, name, email, avatar_url, created_at`,
+    values
+  );
+  return rows[0] || null;
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
   findUserById,
+  findUserByIdSafe,
   getAllUsers,
   deleteUser,
   updateUser,
+  updateUserById,
 };

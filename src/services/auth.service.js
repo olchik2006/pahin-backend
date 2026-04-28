@@ -2,8 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { pool } = require('../config/database');
 
-const register = async ({ full_name, email, password }) => {
-  if (!full_name || !email || !password) {
+const register = async ({ name, email, password }) => {
+  if (!name || !email || !password) {
     throw new Error('Name, email and password are required');
   }
   const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
@@ -13,7 +13,7 @@ const register = async ({ full_name, email, password }) => {
     `INSERT INTO users (name, email, password)
      VALUES ($1, $2, $3)
      RETURNING id, name, email, created_at`,
-    [full_name, email, hashed]
+    [name, email, hashed]
   );
   const user = rows[0];
   const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {

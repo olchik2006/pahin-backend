@@ -10,7 +10,7 @@ const validate = (schema) => (req, res, next) => {
 };
 
 const registerSchema = Joi.object({
-  full_name: Joi.string().min(2).max(100).required().messages({
+  name: Joi.string().min(2).max(100).required().messages({
     'string.min': "Ім'я має містити мінімум 2 символи",
     'any.required': "Ім'я є обов'язковим",
   }),
@@ -40,4 +40,17 @@ const plantTreeSchema = Joi.object({
   message: Joi.string().max(500).optional(),
 });
 
-module.exports = { validate, registerSchema, loginSchema, plantTreeSchema };
+const updateUserSchema = Joi.object({
+  name: Joi.string().min(2).max(100).optional().messages({
+    'string.min': "Ім'я має містити мінімум 2 символи",
+  }),
+  email: Joi.string().email().optional().messages({
+    'string.email': 'Введіть коректний email',
+  }),
+})
+  .min(1)
+  .messages({
+    'object.min': 'Потрібно передати хоча б одне поле для оновлення',
+  });
+
+module.exports = { validate, registerSchema, loginSchema, plantTreeSchema, updateUserSchema };

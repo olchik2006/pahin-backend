@@ -53,4 +53,30 @@ const updateUserSchema = Joi.object({
     'object.min': 'Потрібно передати хоча б одне поле для оновлення',
   });
 
-module.exports = { validate, registerSchema, loginSchema, plantTreeSchema, updateUserSchema };
+const treesQuerySchema = Joi.object({
+  page: Joi.number().integer().min(1).optional(),
+  limit: Joi.number().integer().min(1).max(100).optional(),
+  species: Joi.string().max(100).optional(),
+  region: Joi.string().max(100).optional(),
+  dateFrom: Joi.date().iso().optional(),
+  dateTo: Joi.date().iso().optional(),
+});
+
+const validateQuery = (schema) => (req, res, next) => {
+  const { error } = schema.validate(req.query, { abortEarly: false });
+  if (error) {
+    const errors = error.details.map((d) => d.message);
+    return res.status(400).json({ error: 'Validation failed', details: errors });
+  }
+  next();
+};
+
+module.exports = {
+  validate,
+  validateQuery,
+  registerSchema,
+  loginSchema,
+  plantTreeSchema,
+  updateUserSchema,
+  treesQuerySchema,
+};

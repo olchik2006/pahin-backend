@@ -2,7 +2,21 @@ const treeModel = require('../models/tree.model');
 const speciesModel = require('../models/species.model');
 
 const getAllTrees = async (filters) => {
-  return await treeModel.getAllTrees(filters);
+  const { page, limit, species, region, dateFrom, dateTo } = filters;
+
+  const trees = await treeModel.getAllTrees({ species, region, dateFrom, dateTo, page, limit });
+
+  if (page && limit) {
+    const total = await treeModel.countTrees({ species, region, dateFrom, dateTo });
+    return {
+      data: trees,
+      total,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  return { data: trees };
 };
 
 const getTreeById = async (id) => {

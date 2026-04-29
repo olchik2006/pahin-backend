@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://pahin-backend.onrender.com/api',
+        url: 'https://pahin-backend.onrender.com',
         description: 'Production',
       },
       {

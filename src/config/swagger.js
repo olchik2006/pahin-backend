@@ -10,8 +10,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Local server',
+        url: 'https://pahin-backend.onrender.com/api',
+        description: 'Production',
+      },
+      {
+        url: 'http://localhost:3000/api',
+        description: 'Local',
       },
     ],
     components: {

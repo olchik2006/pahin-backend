@@ -2,6 +2,7 @@ const userModel = require('../models/user.model');
 const treeModel = require('../models/tree.model');
 const certificateModel = require('../models/certificate.model');
 const bcrypt = require('bcryptjs');
+const AppError = require('../utils/AppError');
 
 const createUser = async (data) => {
   return await userModel.createUser(data);
@@ -28,34 +29,32 @@ const updateUser = async (id, data) => {
 };
 
 const getMe = async (userId) => {
-  const user = await userModel.findUserById(userId);
-  if (!user) throw new Error('User not found');
-
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    createdAt: user.created_at,
-  };
+  const user = await userModel.findUserByIdSafe(userId);
+  if (!user) throw new AppError('Користувача не знайдено', 404);
+  return user;
 };
 
-const updateMe = async (userId, { name, password, currentPassword }) => {
+const updateMe = async (userId, { name, email, password, currentPassword }) => {
   const user = await userModel.findUserById(userId);
-  if (!user) throw new Error('User not found');
+  if (!user) throw new AppError('Користувача не знайдено', 404);
 
   let newPassword = user.password;
 
   if (password !== undefined) {
     if (!currentPassword) {
-      throw new Error('Current password is required');
+      throw new AppError('Потрібно вказати поточний пароль', 400);
     }
 
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      throw new Error('Wrong current password');
+      throw new AppError('Невірний поточний пароль', 401);
     }
 
     newPassword = await bcrypt.hash(password, 10);
+  }
+
+  if (email !== undefined) {
+    await userModel.updateUserById(userId, { email });
   }
 
   const updated = await userModel.updateUser(userId, {
@@ -66,7 +65,7 @@ const updateMe = async (userId, { name, password, currentPassword }) => {
   return {
     id: updated.id,
     name: updated.name,
-    email: updated.email,
+    email: email !== undefined ? email : user.email,
     createdAt: updated.created_at,
   };
 };

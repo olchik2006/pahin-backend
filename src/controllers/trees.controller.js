@@ -5,9 +5,9 @@ const treeService = require('../services/tree.service');
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const getAllTrees = catchAsync(async (req, res) => {
-  const { category, region } = req.query;
-  const trees = await treeService.getAllTrees({ category, region });
-  res.json({ message: 'success', status: 200, data: { trees } });
+  const { page, limit, species, region, dateFrom, dateTo } = req.query;
+  const result = await treeService.getAllTrees({ page, limit, species, region, dateFrom, dateTo });
+  res.json({ status: 'success', ...result });
 });
 
 const getSpecies = catchAsync(async (req, res) => {

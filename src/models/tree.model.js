@@ -18,7 +18,9 @@ const createTree = async ({ userId, speciesId, latitude, longitude, locationName
   return rows[0];
 };
 
-const getAllTrees = async ({ category, region } = {}) => {
+const getAllTrees = async ({ species, region, dateFrom, dateTo, page, limit } = {}) => {
+  const values = [];
+
   let query = `
     SELECT
       t.id,
@@ -37,11 +39,9 @@ const getAllTrees = async ({ category, region } = {}) => {
     WHERE 1=1
   `;
 
-  const values = [];
-
-  if (category) {
-    values.push(category);
-    query += ` AND s.category = $${values.length}`;
+  if (species) {
+    values.push(`%${species}%`);
+    query += ` AND s.name_ukr ILIKE $${values.length}`;
   }
 
   if (region) {
@@ -49,10 +49,63 @@ const getAllTrees = async ({ category, region } = {}) => {
     query += ` AND t.location_name ILIKE $${values.length}`;
   }
 
+  if (dateFrom) {
+    values.push(dateFrom);
+    query += ` AND t.planted_at >= $${values.length}`;
+  }
+
+  if (dateTo) {
+    values.push(dateTo);
+    query += ` AND t.planted_at <= $${values.length}`;
+  }
+
   query += ' ORDER BY t.planted_at DESC';
+
+  if (page && limit) {
+    const offset = (page - 1) * limit;
+    values.push(limit);
+    query += ` LIMIT $${values.length}`;
+    values.push(offset);
+    query += ` OFFSET $${values.length}`;
+  }
 
   const { rows } = await pool.query(query, values);
   return rows;
+};
+
+const countTrees = async ({ species, region, dateFrom, dateTo } = {}) => {
+  const values = [];
+
+  let query = `
+    SELECT COUNT(*) AS total
+    FROM trees t
+    JOIN users u        ON u.id = t.user_id
+    JOIN tree_species s ON s.id = t.species_id
+    WHERE 1=1
+  `;
+
+  if (species) {
+    values.push(`%${species}%`);
+    query += ` AND s.name_ukr ILIKE $${values.length}`;
+  }
+
+  if (region) {
+    values.push(`%${region}%`);
+    query += ` AND t.location_name ILIKE $${values.length}`;
+  }
+
+  if (dateFrom) {
+    values.push(dateFrom);
+    query += ` AND t.planted_at >= $${values.length}`;
+  }
+
+  if (dateTo) {
+    values.push(dateTo);
+    query += ` AND t.planted_at <= $${values.length}`;
+  }
+
+  const { rows } = await pool.query(query, values);
+  return parseInt(rows[0].total, 10);
 };
 
 const findTreeById = async (id) => {
@@ -100,4 +153,4 @@ const getTreesByUserId = async (userId) => {
   return rows;
 };
 
-module.exports = { createTree, getAllTrees, findTreeById, getTreesByUserId };
+module.exports = { createTree, getAllTrees, countTrees, findTreeById, getTreesByUserId };

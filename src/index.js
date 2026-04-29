@@ -34,6 +34,7 @@ const corsOptions = {
       'http://localhost:3000',
       'http://localhost:5173',
       'https://pahin-frontend.vercel.app',
+      'https://pahin-backend.onrender.com',
     ];
     if (!origin || allowed.includes(origin)) {
       callback(null, true);

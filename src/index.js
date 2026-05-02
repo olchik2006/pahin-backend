@@ -8,6 +8,7 @@ const { connectDB } = require('./config/database');
 const authRoutes = require('./routes/auth.routes');
 const usersRoutes = require('./routes/users.routes');
 const treesRoutes = require('./routes/trees.routes');
+const speciesRoutes = require('./routes/species.routes');
 const errorHandler = require('./middleware/error.middleware');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
@@ -60,6 +61,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/trees', treesRoutes);
+app.use('/api/species', speciesRoutes);
 
 // ===== 404 =====
 app.use((req, res) => {

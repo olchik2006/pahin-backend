@@ -100,7 +100,8 @@ router.get('/me/certificates', authMiddleware, usersController.getMyCertificates
  *   post:
  *     summary: Create a new user (admin)
  *     tags: [Users]
- *     security: []
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -120,8 +121,10 @@ router.get('/me/certificates', authMiddleware, usersController.getMyCertificates
  *         description: User created successfully
  *       400:
  *         description: Validation failed
+ *       401:
+ *         description: Unauthorized
  */
-router.post('/', usersController.createUser);
+router.post('/', authMiddleware, usersController.createUser);
 
 /**
  * @swagger
@@ -129,12 +132,15 @@ router.post('/', usersController.createUser);
  *   get:
  *     summary: Get all users
  *     tags: [Users]
- *     security: []
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of all users
+ *       401:
+ *         description: Unauthorized
  */
-router.get('/', usersController.getAllUsers);
+router.get('/', authMiddleware, usersController.getAllUsers);
 
 /**
  * @swagger
@@ -142,7 +148,8 @@ router.get('/', usersController.getAllUsers);
  *   get:
  *     summary: Get user by ID
  *     tags: [Users]
- *     security: []
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -153,10 +160,12 @@ router.get('/', usersController.getAllUsers);
  *     responses:
  *       200:
  *         description: User data
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: User not found
  */
-router.get('/:id', usersController.getUserById);
+router.get('/:id', authMiddleware, usersController.getUserById);
 
 /**
  * @swagger
@@ -164,7 +173,8 @@ router.get('/:id', usersController.getUserById);
  *   delete:
  *     summary: Delete user by ID
  *     tags: [Users]
- *     security: []
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -175,9 +185,11 @@ router.get('/:id', usersController.getUserById);
  *     responses:
  *       200:
  *         description: User deleted successfully
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: User not found
  */
-router.delete('/:id', usersController.deleteUser);
+router.delete('/:id', authMiddleware, usersController.deleteUser);
 
 module.exports = router;

@@ -1,7 +1,12 @@
 require('dotenv').config();
 const { pool } = require('../config/database');
 
+const BASE_URL = 'https://raw.githubusercontent.com/olchik2006/pahin-backend/main/assets/species';
+
 const seedSpecies = async () => {
+  await pool.query('TRUNCATE TABLE tree_species CASCADE');
+  console.log('🗑️ Cleared tree_species table');
+
   const species = [
     // ── ХВОЙНІ
     [
@@ -13,7 +18,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       5,
-      null,
+      `${BASE_URL}/pinus-sylvestris.jpg`,
     ],
     [
       'Ялина європейська',
@@ -24,7 +29,7 @@ const seedSpecies = async () => {
       'холодний',
       'Карпати, захід',
       5,
-      null,
+      `${BASE_URL}/picea-abies.jpg`,
     ],
     [
       'Ялиця біла',
@@ -35,7 +40,7 @@ const seedSpecies = async () => {
       'холодний',
       'Карпати',
       6,
-      null,
+      `${BASE_URL}/abies-alba.jpg`,
     ],
     [
       'Модрина європейська',
@@ -46,7 +51,7 @@ const seedSpecies = async () => {
       'помірний',
       'Карпати, захід',
       4,
-      null,
+      `${BASE_URL}/larix-decidua.jpg`,
     ],
     [
       'Ялівець звичайний',
@@ -57,7 +62,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       2,
-      null,
+      `${BASE_URL}/juniperus-communis.jpg`,
     ],
 
     // ── ЛИСТЯНІ
@@ -70,7 +75,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       8,
-      null,
+      `${BASE_URL}/quercus-robur.jpg`,
     ],
     [
       'Клен гостролистий',
@@ -81,7 +86,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       5,
-      null,
+      `${BASE_URL}/acer-platanoides.jpg`,
     ],
     [
       'Береза повисла',
@@ -92,7 +97,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       4,
-      null,
+      `${BASE_URL}/betula-pendula.jpg`,
     ],
     [
       'Бук лісовий',
@@ -103,7 +108,7 @@ const seedSpecies = async () => {
       'помірний',
       'Карпати, захід',
       7,
-      null,
+      `${BASE_URL}/fagus-sylvatica.jpg`,
     ],
     [
       'Ясен звичайний',
@@ -114,7 +119,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       6,
-      null,
+      `${BASE_URL}/fraxinus-excelsior.jpg`,
     ],
     [
       'Горіх грецький',
@@ -125,7 +130,7 @@ const seedSpecies = async () => {
       'помірний',
       'захід, центр, південь',
       8,
-      null,
+      `${BASE_URL}/juglans-regia.jpg`,
     ],
 
     // ── КВІТУЧІ
@@ -138,7 +143,7 @@ const seedSpecies = async () => {
       'помірний',
       'захід, центр',
       7,
-      null,
+      `${BASE_URL}/aesculus-hippocastanum.jpg`,
     ],
     [
       'Черешня пташа',
@@ -149,7 +154,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       5,
-      null,
+      `${BASE_URL}/prunus-avium.jpg`,
     ],
     [
       'Липа серцелиста',
@@ -160,7 +165,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       5,
-      null,
+      `${BASE_URL}/tilia-cordata.jpg`,
     ],
     [
       'Черемха звичайна',
@@ -171,7 +176,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       4,
-      null,
+      `${BASE_URL}/prunus-padus.jpg`,
     ],
     [
       'Глід одноматочковий',
@@ -182,7 +187,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       3,
-      null,
+      `${BASE_URL}/crataegus-monogyna.jpg`,
     ],
 
     // ── ПЛОДОВІ
@@ -195,7 +200,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       4,
-      null,
+      `${BASE_URL}/malus-domestica.jpg`,
     ],
     [
       'Груша звичайна',
@@ -206,7 +211,7 @@ const seedSpecies = async () => {
       'помірний',
       'захід, центр',
       5,
-      null,
+      `${BASE_URL}/pyrus-communis.jpg`,
     ],
     [
       'Слива домашня',
@@ -217,7 +222,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       4,
-      null,
+      `${BASE_URL}/prunus-domestica.jpg`,
     ],
     [
       'Вишня звичайна',
@@ -228,7 +233,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       3,
-      null,
+      `${BASE_URL}/prunus-cerasus.jpg`,
     ],
     [
       'Абрикос звичайний',
@@ -239,7 +244,7 @@ const seedSpecies = async () => {
       'теплий',
       'центр, південь',
       4,
-      null,
+      `${BASE_URL}/prunus-armeniaca.jpg`,
     ],
 
     // ── ШВИДКОРОСТУЧІ
@@ -252,7 +257,7 @@ const seedSpecies = async () => {
       'помірний',
       'всі регіони',
       10,
-      null,
+      `${BASE_URL}/populus-nigra.jpg`,
     ],
     [
       'Верба біла',
@@ -263,7 +268,7 @@ const seedSpecies = async () => {
       'помірний',
       'береги водойм',
       8,
-      null,
+      `${BASE_URL}/salix-alba.jpg`,
     ],
     [
       'Пауловнія повстяна',
@@ -274,7 +279,7 @@ const seedSpecies = async () => {
       'теплий',
       'південь, захід',
       12,
-      null,
+      `${BASE_URL}/paulownia-tomentosa.jpg`,
     ],
     [
       'Верба плакуча',
@@ -285,7 +290,7 @@ const seedSpecies = async () => {
       'помірний',
       'береги водойм',
       6,
-      null,
+      `${BASE_URL}/salix-babylonica.jpg`,
     ],
   ];
 

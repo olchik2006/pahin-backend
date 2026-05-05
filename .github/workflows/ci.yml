@@ -17,7 +17,7 @@ on:
 
 jobs:
   ci:
-    name: Install → Lint → Test
+    name: Install → Lint → Format → Test → Coverage
     runs-on: ubuntu-latest
 
     steps:
@@ -37,10 +37,21 @@ jobs:
         run: npm run lint
 
       - name: Check Prettier formatting
-        run: npx prettier --check src/
+        run: npm run format:check
 
       - name: Run tests
         run: npm test
+        env:
+          NODE_ENV: test
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Run coverage
+        run: npm run test:coverage
         env:
           NODE_ENV: test
           DB_HOST: ${{ secrets.DB_HOST }}

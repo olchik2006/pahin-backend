@@ -22,22 +22,23 @@ const getAllTrees = async ({ species, region, dateFrom, dateTo, page, limit } = 
   const values = [];
 
   let query = `
-    SELECT
-      t.id,
-      t.user_id          AS "userId",
-      u.name             AS "userName",
-      s.name_ukr         AS "speciesName",
-      s.category         AS "speciesCategory",
-      t.latitude,
-      t.longitude,
-      t.location_name    AS "locationName",
-      t.user_description AS "message",
-      t.planted_at       AS "createdAt"
-    FROM trees t
-    JOIN users u        ON u.id = t.user_id
-    JOIN tree_species s ON s.id = t.species_id
-    WHERE 1=1
-  `;
+  SELECT
+    t.id,
+    t.user_id          AS "userId",
+    u.name             AS "userName",
+    s.name_ukr         AS "speciesName",
+    s.category         AS "speciesCategory",
+    s.image_url        AS "speciesImage",
+    t.latitude,
+    t.longitude,
+    t.location_name    AS "locationName",
+    t.user_description AS "message",
+    t.planted_at       AS "createdAt"
+  FROM trees t
+  JOIN users u        ON u.id = t.user_id
+  JOIN tree_species s ON s.id = t.species_id
+  WHERE 1=1
+`;
 
   if (species) {
     values.push(`%${species}%`);
@@ -111,20 +112,21 @@ const countTrees = async ({ species, region, dateFrom, dateTo } = {}) => {
 const findTreeById = async (id) => {
   const { rows } = await pool.query(
     `SELECT
-       t.id,
-       t.user_id          AS "userId",
-       u.name             AS "userName",
-       s.name_ukr         AS "speciesName",
-       s.category         AS "speciesCategory",
-       t.latitude,
-       t.longitude,
-       t.location_name    AS "locationName",
-       t.user_description AS "message",
-       t.planted_at       AS "createdAt"
-     FROM trees t
-     JOIN users u        ON u.id = t.user_id
-     JOIN tree_species s ON s.id = t.species_id
-     WHERE t.id = $1`,
+   t.id,
+   t.user_id          AS "userId",
+   u.name             AS "userName",
+   s.name_ukr         AS "speciesName",
+   s.category         AS "speciesCategory",
+   s.image_url        AS "speciesImage",
+   t.latitude,
+   t.longitude,
+   t.location_name    AS "locationName",
+   t.user_description AS "message",
+   t.planted_at       AS "createdAt"
+ FROM trees t
+ JOIN users u        ON u.id = t.user_id
+ JOIN tree_species s ON s.id = t.species_id
+ WHERE t.id = $1`,
     [id]
   );
   return rows[0];
@@ -133,21 +135,22 @@ const findTreeById = async (id) => {
 const getTreesByUserId = async (userId) => {
   const { rows } = await pool.query(
     `SELECT
-       t.id,
-       t.user_id          AS "userId",
-       u.name             AS "userName",
-       s.name_ukr         AS "speciesName",
-       s.category         AS "speciesCategory",
-       t.latitude,
-       t.longitude,
-       t.location_name    AS "locationName",
-       t.user_description AS "message",
-       t.planted_at       AS "createdAt"
-     FROM trees t
-     JOIN users u        ON u.id = t.user_id
-     JOIN tree_species s ON s.id = t.species_id
-     WHERE t.user_id = $1
-     ORDER BY t.planted_at DESC`,
+   t.id,
+   t.user_id          AS "userId",
+   u.name             AS "userName",
+   s.name_ukr         AS "speciesName",
+   s.category         AS "speciesCategory",
+   s.image_url        AS "speciesImage",
+   t.latitude,
+   t.longitude,
+   t.location_name    AS "locationName",
+   t.user_description AS "message",
+   t.planted_at       AS "createdAt"
+ FROM trees t
+ JOIN users u        ON u.id = t.user_id
+ JOIN tree_species s ON s.id = t.species_id
+ WHERE t.user_id = $1
+ ORDER BY t.planted_at DESC`,
     [userId]
   );
   return rows;

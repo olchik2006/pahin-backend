@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   avatar_url TEXT,
+  role VARCHAR(20) NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -30,7 +31,8 @@ CREATE TABLE IF NOT EXISTS trees (
   longitude DECIMAL(11, 8) NOT NULL,
   planted_at TIMESTAMP NOT NULL DEFAULT NOW(),
   user_description TEXT,
-  location_name VARCHAR(255)
+  location_name VARCHAR(255),
+  status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected'))
 );
 
 CREATE TABLE IF NOT EXISTS certificates (

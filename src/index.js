@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth.routes');
 const usersRoutes = require('./routes/users.routes');
 const treesRoutes = require('./routes/trees.routes');
 const speciesRoutes = require('./routes/species.routes');
+const adminRoutes = require('./routes/admin.routes');
 const errorHandler = require('./middleware/error.middleware');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
@@ -62,6 +63,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/trees', treesRoutes);
 app.use('/api/species', speciesRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ===== 404 =====
 app.use((req, res) => {
@@ -75,7 +77,7 @@ app.use(errorHandler);
 const startServer = async () => {
   await connectDB();
 
-  const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
     console.log(`📡 Environment: ${process.env.NODE_ENV}`);

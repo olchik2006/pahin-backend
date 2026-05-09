@@ -1,8 +1,8 @@
-const { getAllSpecies } = require('../models/species.model');
+const treeService = require('../services/tree.service');
 
 const getSpecies = async (req, res) => {
   try {
-    const species = await getAllSpecies();
+    const species = await treeService.getAllSpecies();
     return res.status(200).json(species);
   } catch (error) {
     console.error('getSpecies error:', error);

@@ -31,8 +31,24 @@ const getTreesByUserId = async (userId) => {
   return await treeModel.getTreesByUserId(userId);
 };
 
+const mapSpeciesInfo = (s) => ({
+  id: s.id,
+  name: s.name,
+  latinName: s.latinName,
+  category: s.category,
+  description: s.description,
+  imageUrl: s.imageUrl,
+  info: {
+    sun: s.sun || undefined,
+    ground: s.ground || undefined,
+    distance: s.distance ? String(s.distance) : undefined,
+    location: s.location || undefined,
+  },
+});
+
 const getAllSpecies = async () => {
-  return await speciesModel.getAllSpecies();
+  const rows = await speciesModel.getAllSpecies();
+  return rows.map(mapSpeciesInfo);
 };
 
 module.exports = { getAllTrees, getTreeById, createTree, getTreesByUserId, getAllSpecies };

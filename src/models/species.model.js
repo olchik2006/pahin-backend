@@ -8,7 +8,10 @@ const getAllSpecies = async () => {
        latin_name AS "latinName",
        category,
        description,
-       CONCAT_WS(', ', soil, weather, region) AS "suitableFor",
+       soil       AS ground,
+       weather    AS sun,
+       region     AS location,
+       distance   AS distance,
        image_url  AS "imageUrl"
      FROM tree_species
      ORDER BY category, name_ukr`
@@ -24,7 +27,10 @@ const findSpeciesById = async (id) => {
        latin_name AS "latinName",
        category,
        description,
-       CONCAT_WS(', ', soil, weather, region) AS "suitableFor",
+       soil       AS ground,
+       weather    AS sun,
+       region     AS location,
+       distance   AS distance,
        image_url  AS "imageUrl"
      FROM tree_species
      WHERE id = $1`,

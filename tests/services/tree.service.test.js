@@ -135,15 +135,66 @@ describe('tree.service', () => {
   describe('getAllSpecies', () => {
     test('should return all species', async () => {
       const species = [
-        { id: 1, name: 'Oak' },
-        { id: 2, name: 'Pine' },
+        {
+          id: 1,
+          name_ukr: 'Oak',
+          latin_name: 'Quercus',
+          category: 'дерево',
+          description: 'desc',
+          soil: 'суглинок',
+          weather: 'помірний',
+          region: 'всі регіони',
+          distance: '5',
+          image_url: 'http://img.jpg',
+        },
+        {
+          id: 2,
+          name_ukr: 'Pine',
+          latin_name: 'Pinus',
+          category: 'дерево',
+          description: 'desc2',
+          soil: 'пісок',
+          weather: 'сонячний',
+          region: 'захід',
+          distance: '3',
+          image_url: 'http://img2.jpg',
+        },
       ];
       speciesModel.getAllSpecies.mockResolvedValue(species);
 
       const result = await treeService.getAllSpecies();
 
       expect(speciesModel.getAllSpecies).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(species);
+      expect(result).toEqual([
+        {
+          id: 1,
+          name: 'Oak',
+          latinName: 'Quercus',
+          category: 'дерево',
+          description: 'desc',
+          imageUrl: 'http://img.jpg',
+          info: {
+            ground: 'суглинок',
+            sun: 'помірний',
+            location: 'всі регіони',
+            distance: '5',
+          },
+        },
+        {
+          id: 2,
+          name: 'Pine',
+          latinName: 'Pinus',
+          category: 'дерево',
+          description: 'desc2',
+          imageUrl: 'http://img2.jpg',
+          info: {
+            ground: 'пісок',
+            sun: 'сонячний',
+            location: 'захід',
+            distance: '3',
+          },
+        },
+      ]);
     });
   });
 });

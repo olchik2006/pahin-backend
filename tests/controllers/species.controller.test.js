@@ -1,10 +1,10 @@
 /* eslint-env jest, node */
 
-jest.mock('../../src/models/species.model', () => ({
+jest.mock('../../src/services/tree.service', () => ({
   getAllSpecies: jest.fn(),
 }));
 
-const speciesModel = require('../../src/models/species.model');
+const treeService = require('../../src/services/tree.service');
 const speciesController = require('../../src/controllers/species.controller');
 
 describe('species.controller', () => {
@@ -20,14 +20,32 @@ describe('species.controller', () => {
     };
 
     const species = [
-      { id: 1, name: 'Oak' },
-      { id: 2, name: 'Pine' },
+      {
+        id: 1,
+        name: 'Oak',
+        info: {
+          ground: 'суглинок',
+          sun: 'помірний',
+          location: 'всі регіони',
+          distance: '5',
+        },
+      },
+      {
+        id: 2,
+        name: 'Pine',
+        info: {
+          ground: 'пісок',
+          sun: 'сонячний',
+          location: 'захід',
+          distance: '3',
+        },
+      },
     ];
-    speciesModel.getAllSpecies.mockResolvedValue(species);
+    treeService.getAllSpecies.mockResolvedValue(species);
 
     await speciesController.getSpecies(req, res);
 
-    expect(speciesModel.getAllSpecies).toHaveBeenCalledTimes(1);
+    expect(treeService.getAllSpecies).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(species);
   });
@@ -40,16 +58,14 @@ describe('species.controller', () => {
     };
 
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    speciesModel.getAllSpecies.mockRejectedValue(new Error('DB error'));
+    treeService.getAllSpecies.mockRejectedValue(new Error('DB error'));
 
     await speciesController.getSpecies(req, res);
 
-    expect(speciesModel.getAllSpecies).toHaveBeenCalledTimes(1);
+    expect(treeService.getAllSpecies).toHaveBeenCalledTimes(1);
     expect(consoleSpy).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({
-      message: 'Internal server error',
-    });
+    expect(res.json).toHaveBeenCalledWith({ message: 'Internal server error' });
 
     consoleSpy.mockRestore();
   });

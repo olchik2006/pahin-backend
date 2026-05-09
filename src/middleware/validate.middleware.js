@@ -47,6 +47,10 @@ const updateUserSchema = Joi.object({
   email: Joi.string().email().optional().messages({
     'string.email': 'Введіть коректний email',
   }),
+  currentPassword: Joi.string().optional(),
+  password: Joi.string().min(6).optional().messages({
+    'string.min': 'Пароль має містити мінімум 6 символів',
+  }),
 })
   .min(1)
   .messages({

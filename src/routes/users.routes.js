@@ -58,7 +58,7 @@ router.get('/me', authMiddleware, usersController.getMe);
  *       401:
  *         description: Unauthorized
  */
-router.put('/me', authMiddleware, validate(updateUserSchema), usersController.updateMe);
+router.patch('/me', authMiddleware, validate(updateUserSchema), usersController.updateMe);
 
 /**
  * @swagger

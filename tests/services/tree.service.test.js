@@ -137,29 +137,30 @@ describe('tree.service', () => {
       const species = [
         {
           id: 1,
-          name_ukr: 'Oak',
-          latin_name: 'Quercus',
+          name: 'Oak',
+          latinName: 'Quercus',
           category: 'дерево',
           description: 'desc',
-          soil: 'суглинок',
-          weather: 'помірний',
-          region: 'всі регіони',
+          ground: 'суглинок',
+          sun: 'помірний',
+          location: 'всі регіони',
           distance: '5',
-          image_url: 'http://img.jpg',
+          imageUrl: 'http://img.jpg',
         },
         {
           id: 2,
-          name_ukr: 'Pine',
-          latin_name: 'Pinus',
+          name: 'Pine',
+          latinName: 'Pinus',
           category: 'дерево',
           description: 'desc2',
-          soil: 'пісок',
-          weather: 'сонячний',
-          region: 'захід',
+          ground: 'пісок',
+          sun: 'сонячний',
+          location: 'захід',
           distance: '3',
-          image_url: 'http://img2.jpg',
+          imageUrl: 'http://img2.jpg',
         },
       ];
+
       speciesModel.getAllSpecies.mockResolvedValue(species);
 
       const result = await treeService.getAllSpecies();

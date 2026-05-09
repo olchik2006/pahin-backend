@@ -33,16 +33,16 @@ const getTreesByUserId = async (userId) => {
 
 const mapSpeciesInfo = (s) => ({
   id: s.id,
-  name: s.name_ukr,
-  latinName: s.latin_name,
+  name: s.name,
+  latinName: s.latinName,
   category: s.category,
   description: s.description,
-  imageUrl: s.image_url,
+  imageUrl: s.imageUrl,
   info: {
-    sun: s.weather || undefined,
-    ground: s.soil || undefined,
-    distance: s.distance ? String(s.distance) : undefined,
-    location: s.region || undefined,
+    sun: s.sun,
+    ground: s.ground,
+    distance: s.distance,
+    location: s.location,
   },
 });
 

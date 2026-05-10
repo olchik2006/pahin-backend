@@ -120,9 +120,11 @@ src/
 └── index.js # Application entry point
 
 assets/
+
 └── species/ # Species images (served as static files)
 
 docker/
+
 └── schema.sql # Database schema (auto-applied in Docker)
 
 ## API Reference
@@ -142,7 +144,7 @@ Interactive Swagger docs available at `/api/docs` when the server is running.
 | Method | Endpoint                     | Description              | Auth required |
 | ------ | ---------------------------- | ------------------------ | ------------- |
 | GET    | `/api/users/me`              | Get current user profile | Yes           |
-| PUT    | `/api/users/me`              | Update profile           | Yes           |
+| PATCH  | `/api/users/me`              | Update profile           | Yes           |
 | GET    | `/api/users/me/trees`        | Get user's planted trees | Yes           |
 | GET    | `/api/users/me/certificates` | Get user's certificates  | Yes           |
 | GET    | `/api/users`                 | Get all users            | Yes           |
@@ -152,13 +154,26 @@ Interactive Swagger docs available at `/api/docs` when the server is running.
 
 ### Trees
 
-| Method | Endpoint             | Description                | Auth required |
-| ------ | -------------------- | -------------------------- | ------------- |
-| GET    | `/api/trees`         | Get all trees (map data)   | No            |
-| GET    | `/api/trees/species` | Get available tree species | No            |
-| GET    | `/api/trees/:id`     | Get tree by ID             | No            |
-| POST   | `/api/trees`         | Plant a tree               | Yes           |
-| DELETE | `/api/trees/:id`     | Delete a tree              | Yes           |
+| Method | Endpoint         | Description              | Auth required |
+| ------ | ---------------- | ------------------------ | ------------- |
+| GET    | `/api/trees`     | Get all trees (map data) | No            |
+| GET    | `/api/trees/:id` | Get tree by ID           | No            |
+| POST   | `/api/trees`     | Plant a tree             | Yes           |
+| DELETE | `/api/trees/:id` | Delete a tree            | Yes           |
+
+### Species
+
+| Method | Endpoint       | Description          | Auth required |
+| ------ | -------------- | -------------------- | ------------- |
+| GET    | `/api/species` | Get all tree species | No            |
+
+### Admin
+
+| Method | Endpoint                       | Description       | Auth required |
+| ------ | ------------------------------ | ----------------- | ------------- |
+| GET    | `/api/admin/trees`             | Get pending trees | Yes (Admin)   |
+| PATCH  | `/api/admin/trees/:id/approve` | Approve tree      | Yes (Admin)   |
+| PATCH  | `/api/admin/trees/:id/reject`  | Reject tree       | Yes (Admin)   |
 
 ### Other
 
@@ -169,9 +184,13 @@ Interactive Swagger docs available at `/api/docs` when the server is running.
 ## Scripts
 
 ```bash
-npm run dev       # Start development server with hot reload
-npm run start     # Start production server
-npm run lint      # Run ESLint
-npm run lint:fix  # Run ESLint and auto-fix issues
-npm run format    # Format code with Prettier
+npm run dev             # Start development server with hot reload
+npm run start           # Start production server
+npm run lint            # Run ESLint
+npm run lint:fix        # Run ESLint and auto-fix issues
+npm run format          # Format code with Prettier
+npm run format:check    # Check formatting without writing
+npm run test            # Run tests
+npm run test:coverage   # Run tests with coverage report
+npm run seed:species    # Seed tree species data
 ```

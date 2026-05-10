@@ -6,13 +6,14 @@ const createTree = async ({ userId, speciesId, latitude, longitude, locationName
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING
        id,
-       user_id      AS "userId",
-       species_id   AS "speciesId",
+       user_id          AS "userId",
+       species_id       AS "speciesId",
        latitude,
        longitude,
-       location_name AS "locationName",
+       location_name    AS "locationName",
        user_description AS "message",
-       planted_at   AS "createdAt"`,
+       planted_at       AS "createdAt",
+       status`,
     [userId, speciesId, latitude, longitude, locationName, message]
   );
   return rows[0];
@@ -33,11 +34,12 @@ const getAllTrees = async ({ species, region, dateFrom, dateTo, page, limit } = 
     t.longitude,
     t.location_name    AS "locationName",
     t.user_description AS "message",
-    t.planted_at       AS "createdAt"
+    t.planted_at       AS "createdAt",
+    t.status
   FROM trees t
   JOIN users u        ON u.id = t.user_id
   JOIN tree_species s ON s.id = t.species_id
-  WHERE 1=1
+  WHERE t.status = 'approved'
 `;
 
   if (species) {
@@ -82,7 +84,7 @@ const countTrees = async ({ species, region, dateFrom, dateTo } = {}) => {
     FROM trees t
     JOIN users u        ON u.id = t.user_id
     JOIN tree_species s ON s.id = t.species_id
-    WHERE 1=1
+    WHERE t.status = 'approved'
   `;
 
   if (species) {
@@ -122,7 +124,8 @@ const findTreeById = async (id) => {
    t.longitude,
    t.location_name    AS "locationName",
    t.user_description AS "message",
-   t.planted_at       AS "createdAt"
+   t.planted_at       AS "createdAt",
+   t.status
  FROM trees t
  JOIN users u        ON u.id = t.user_id
  JOIN tree_species s ON s.id = t.species_id
@@ -145,7 +148,8 @@ const getTreesByUserId = async (userId) => {
    t.longitude,
    t.location_name    AS "locationName",
    t.user_description AS "message",
-   t.planted_at       AS "createdAt"
+   t.planted_at       AS "createdAt",
+   t.status
  FROM trees t
  JOIN users u        ON u.id = t.user_id
  JOIN tree_species s ON s.id = t.species_id

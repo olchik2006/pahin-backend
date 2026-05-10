@@ -16,18 +16,9 @@ REST API for the Pahin platform — a volunteer tree-planting initiative that al
 
 ## Prerequisites
 
-### With Docker (recommended)
-
 - Docker Desktop v4+
 
-### Without Docker
-
-- Node.js v20+
-- PostgreSQL v15+
-
 ## Getting Started
-
-### Run with Docker (recommended)
 
 1. Clone the repository
 
@@ -54,37 +45,11 @@ The server will be running at `http://localhost:3000`
 
 ### Seed the database
 
-To populate the database with tree species data (including image URLs):
+To populate the database with tree species data:
 
 ```bash
 docker exec -it pahin-backend-app-1 node src/seeders/speciesSeed.js
 ```
-
-### Run locally (without Docker)
-
-1. Clone the repository and install dependencies
-
-```bash
-git clone https://github.com/olchik2006/pahin-backend.git
-cd pahin-backend
-npm install
-```
-
-2. Create a `.env` file based on `.env.example` and fill in the values
-
-```bash
-cp .env.example .env
-```
-
-3. Set up the database — run `docker/schema.sql` against your PostgreSQL instance
-
-4. Start the development server
-
-```bash
-npm run dev
-```
-
-The server will be running at `http://localhost:3000`
 
 ## Environment Variables
 

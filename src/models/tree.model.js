@@ -154,7 +154,7 @@ const getTreesByUserId = async (userId) => {
  JOIN users u        ON u.id = t.user_id
  JOIN tree_species s ON s.id = t.species_id
  WHERE t.user_id = $1
-   AND t.status != 'rejected'
+   AND t.status = 'approved'
  ORDER BY t.planted_at DESC`,
     [userId]
   );
